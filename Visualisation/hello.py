@@ -12,10 +12,12 @@ from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 import pandas as pd
-external_stylesheets = [dbc.themes.BOOTSTRAP]
-colors = {
-    'background': '#000000',
-    'text': '#ffffff'
+external_stylesheets = ['https://codepen.io/anon/pen/mardKv.css']
+theme =  {
+    'dark': True,
+    'detail': '#007439',
+    'primary': '#00EA64',
+    'secondary': '#6E6E6E',
 }
 
 
@@ -78,6 +80,7 @@ app.layout =  html.Div([
 def render_content(tab):
     if tab == 'tab-1':
        return html.Div([
+        html.Div([
         dcc.Graph(
             id="scatter_chart",
             figure={
@@ -85,8 +88,8 @@ def render_content(tab):
             go.Scatter(
                 x=df.text,
                 y=df.labels,
-                mode='markers',
-                marker_color='cornflowerblue'
+                mode='markers'
+                
 
                 )
 
@@ -94,7 +97,9 @@ def render_content(tab):
             'layout':go.Layout(
                 title ="Scatterplot",
                 xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
+                yaxis = {'title': 'label'},
+                
+        
 
                 )
             }
@@ -103,7 +108,134 @@ def render_content(tab):
             )
 
 
+        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+        html.Div([
+        dcc.Graph(
+            id="pie_chart",
+            figure={
+            'data':[
+            go.Pie(
+                labels=['positives','negatives','neutrals'],
+                values=[500,460,620],
+                name="Sentiment Analysis",
+                hoverinfo='label+percent',
+                textinfo='value'
+                
+
+                )
+
+            ],
+            'layout':go.Layout(
+                title ="Pie Chart",
+                
+                
+        
+
+                )
+            }
+
+
+            )
+
+
+        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+
+        html.Div([
+        dcc.Graph(
+            id="pie_chart",
+            figure={
+            'data':[
+            go.Pie(
+                labels=['positives','negatives','neutrals'],
+                values=[500,460,620],
+                name="Sentiment Analysis",
+                hoverinfo='label+percent',
+                textinfo='value'
+                
+
+                )
+
+            ],
+            'layout':go.Layout(
+                title ="Pie Chart",
+                
+                
+        
+
+                )
+            }
+
+
+            )
+
+
+        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+
+        html.Div([
+        dcc.Graph(
+            id="pie_chart",
+            figure={
+            'data':[
+            go.Pie(
+                labels=['positives','negatives','neutrals'],
+                values=[500,460,620],
+                name="Sentiment Analysis",
+                hoverinfo='label+percent',
+                textinfo='value'
+                
+
+                )
+
+            ],
+            'layout':go.Layout(
+                title ="Pie Chart",
+                
+                
+        
+
+                )
+            }
+
+
+            )
+
+
+        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+
+        html.Div([
+        dcc.Graph(
+            id="pie_chart",
+            figure={
+            'data':[
+            go.Pie(
+                labels=['positives','negatives','neutrals'],
+                values=[500,460,620],
+                name="Sentiment Analysis",
+                hoverinfo='label+percent',
+                textinfo='value'
+                
+
+                )
+
+            ],
+            'layout':go.Layout(
+                title ="Pie Chart",
+                
+                
+        
+
+                )
+            }
+
+
+            )
+
+
+        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+
         ])
+
+        
     elif tab == 'tab-2':
        return html.Div([
         dcc.Graph(
