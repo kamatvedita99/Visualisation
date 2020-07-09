@@ -10,8 +10,15 @@ import dash_html_components as html
 import dash_table
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
+import plotly.graph_objs as go #added
 import pandas as pd
+import plotly.io as pio
+import plotly.express as px
+import nltk
+import regex as re
+from plotly.subplots import make_subplots
+
+pio.templates.default="plotly_dark"
 external_stylesheets = ['https://codepen.io/anon/pen/mardKv.css']
 theme =  {
     'dark': True,
@@ -22,45 +29,80 @@ theme =  {
 
 
 app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
+
+
+df1 = pd.read_csv('lock1.csv',encoding='latin')
+df2 = pd.read_csv('lock2.csv',encoding='latin')
+df3 = pd.read_csv('lock3.csv',encoding='latin')
+df4 = pd.read_csv('lock4.csv',encoding='latin')
+
+# Use this for hashtag extract
+
+def hashtag_extract(x):
+    hashtags = []
+
+    # Loop over the words in the tweet
+    for i in x:
+        ht = re.findall(r"#(\w+)", i)
+        ht=[hts.lower() for hts in ht]
+        #ht=map(str.lower,ht)
+
+
+        hashtags.append(ht)
+    return hashtags
+
+HT_regular = hashtag_extract(df1['tweet'][df1['labels'] == 0])
+# extracting hashtags from racist/sexist tweets
+HT_negative = hashtag_extract(df1['tweet'][df1['labels'] == -1])
+HT_positive = hashtag_extract(df1['tweet'][df1['labels'] == 1])
+# unnesting list
+HT_regular = sum(HT_regular,[])
+HT_negative = sum(HT_negative,[])
+HT_positive = sum(HT_positive,[])
+#print(HT_regular,file=sys.stderr)
+#print(HT_negative,file=sys.stderr)
+#positive hashtags
+a = nltk.FreqDist(HT_regular)
+d = pd.DataFrame({'Hashtag': list(a.keys()),
+                  'Count': list(a.values())})
+# selecting top 10 most frequent hashtags     
+d = d.nlargest(columns="Count", n = 5) 
+d.head()
+#plt.figure(figsize=(22,10))
+#ax = sns.barplot(data=d, x= "Hashtag", y = "Count")
+#ax.set(ylabel = 'Count')
+#plt.show()
+#negative hastags funtion will come over here
+b = nltk.FreqDist(HT_negative)
+e = pd.DataFrame({'Hashtag': list(b.keys()), 'Count': list(b.values())})
+# selecting top 10 most frequent hashtags
+e = e.nlargest(columns="Count", n = 5)   
+#plt.figure(figsize=(16,5))
+#ax = sns.barplot(data=e, x= "Hashtag", y = "Count")
+#ax.set(ylabel = 'Count')
+#plt.show()'''
+g = nltk.FreqDist(HT_positive)
+h = pd.DataFrame({'Hashtag': list(g.keys()),
+                  'Count': list(g.values())})
+# selecting top 10 most frequent hashtags     
+h = h.nlargest(columns="Count", n = 5) 
+#Use this for wordcount
 '''
-db_name = 'mydb'
-client = None
-db = None
+def word_count(sentence):
+    return len(sentence.split())
+df['word count'] = df['text'].apply(word_count)
+x = df['word count'][df.labels == 1]
+y = df['word count'][df.labels == 0]
+print(x,file=sys.stderr)
+print(y,file=sys.stderr)
+#plt.figure(figsize=(12,6))
+#plt.xlim(0,45)
+#plt.xlabel('word count')
+#plt.ylabel('frequency')
+#g = plt.hist([x, y], color=['r','b'], alpha=0.5, label=['positive','negative'])
+#plt.legend(loc='upper right')
+#Till here'''
 
-if 'VCAP_SERVICES' in os.environ:
-    vcap = json.loads(os.getenv('VCAP_SERVICES'))
-    print('Found VCAP_SERVICES')
-    if 'cloudantNoSQLDB' in vcap:
-        creds = vcap['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)
-elif "CLOUDANT_URL" in os.environ:
-    client = Cloudant(os.environ['CLOUDANT_USERNAME'], os.environ['CLOUDANT_PASSWORD'], url=os.environ['CLOUDANT_URL'], connect=True)
-    db = client.create_database(db_name, throw_on_exists=False)
-elif os.path.isfile('vcap-local.json'):
-    with open('vcap-local.json') as f:
-        vcap = json.load(f)
-        print('Found local VCAP_SERVICES')
-        creds = vcap['services']['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)'''
-
-# On IBM Cloud Cloud Foundry, get the port number from the environment variable PORT
-# When running this app on the local machine, default the port to 8000
-
-#port = int(os.getenv('PORT', 8000)) #!!COMMENTED FROM BHUSHAN'S CODE!!
-
-#@app.route('/')
-#def root():
-#    return app.send_static_file('index.html')
-
-df = pd.read_csv(r'C:\Users\VEDITA KAMAT\Desktop\VEDITA\MyProjects\IBMHC\Visualisation\final.csv')
 
 app.layout =  html.Div([
     dcc.Tabs(id="tabs", value='tab-1', children=[
@@ -70,170 +112,221 @@ app.layout =  html.Div([
         dcc.Tab(label='Lockdown 2.0', value='tab-4'),
         dcc.Tab(label='Lockdown 3.0', value='tab-5'),
         dcc.Tab(label='Lockdown 4.0', value='tab-6'),
-    ]),
+    ],
+      colors={
+                "border":"#eeeeee",
+                "primary":"#679b9b",
+                "background":"#2e9cc8",
+
+      }
+    ),
     html.Div(id='tabs-content')
 ])
+#------------------------------------------DONUT CHART----------------------------------------------------------
+count1=(df1['labels'][df1['labels']==1]).count()
+countneg=(df1['labels'][df1['labels']==-1]).count()
+count0=(df1['labels'][df1['labels']==0]).count()
+print(count1)
+colors=['#ff9595','royalblue','#80bdab']
+#--------------------------------------HASHTAGS SUBPLOTS---------------------------------------------------------
+fig = make_subplots(rows=1, cols=3)
+
+fig.add_trace(
+    go.Bar(y=e.Hashtag,
+                x=e.Count,
+                name='# Negative',
+                textfont_color='white',
+                
+                orientation='h'),
+    row=1, col=1
+)
+
+fig.add_trace(
+    go.Bar(y=h.Hashtag,
+                x=h.Count,
+                name='# Positive',
+                textfont_color='white',
+                
+                orientation='h'),
+    row=1, col=2
+)
+
+fig.add_trace(
+    go.Bar(y=d.Hashtag,
+                x=d.Count,
+                name='# Neutral',
+                textfont_color='white',
+
+                orientation='h'),
+    row=1, col=3
+)
 
 
+
+fig.update_layout( title ="Bar Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                uniformtext_minsize=8, 
+                uniformtext_mode='hide',
+                title_text="Popular Hashtags"
+
+                )
+
+
+#----------------------------------------WATSON TONE ANALYSER------------------------------------------------------------
+tone=pd.read_csv('lock1ToneAnalyser.csv')
+count_sad=tone['sadness'].sum()
+count_joy=tone['joy'].sum()
+count_confident=tone['confident'].sum()
+count_analytical=tone['analytical'].sum()
+count_tentative=tone['tentative'].sum()
+count_fear=tone['fear'].sum()
+count_anger=tone['anger'].sum()
+
+colors_emo=['#ff9595','#ff9595','#ff9595','#80bdab','royalblue','royalblue','royalblue']
+
+fig1 = go.Figure([go.Bar(
+             x=['😁','😎','🧐','😐','🥺','😨','😡'],
+             y=[count_joy,count_confident,count_analytical,count_tentative,count_sad,count_fear,count_anger],
+             hovertext=['Happy','Hopeful','Analytical','Neutral','Sad','Fearful','Angry'],
+             hoverinfo='text+y',
+             marker_color=colors_emo
+             
+
+    )])
+
+
+
+
+
+fig1.update_layout( title ="Bar Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                uniformtext_minsize=8, 
+                uniformtext_mode='hide',
+                title_text="Tone Analysis",
+                #yaxis_tickformat='percent'
+                )
+fig1.update_xaxes(tickfont=dict(size=25))
+
+#-------------------------------------------------LINE CHART-------------------------------------------------------------
+df_p1=pd.read_csv('df_p1.csv')
+df_neg1=pd.read_csv('df_neg1.csv')
+df_neu1=pd.read_csv('df_neu1.csv')
+fig2=go.Figure()
+    
+#fig2=tools.make_subplots(rows=1,cols=3,shared_xaxes=True,shared_yaxes=True)
+fig2.add_trace(go.Scatter(x=df_neg1.day,
+    y=df_neg1.neg,name='negatives'))
+fig2.add_trace(go.Scatter(x=df_p1['day'],
+    y=df_p1['pos'],name='positives'))
+
+fig2.add_trace(go.Scatter( x=df_neu1.day,
+    y=df_neu1.neu,name='neutrals'))
+
+fig2['layout'].update( title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                #yaxis_tickformat='percent'
+                )
+#fig2.update_xaxes(tickfont=dict(size=5))
+#-----------------------------------------------------------------------------------------------------------
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 def render_content(tab):
     if tab == 'tab-1':
        return html.Div([
-        html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                
-
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'},
-                
         
-
-                )
-            }
-
-
-            )
-
-
-        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
-        html.Div([
-        dcc.Graph(
+html.Div([
+            dcc.Graph(
             id="pie_chart",
-            figure={
+            figure=
+         {
             'data':[
             go.Pie(
                 labels=['positives','negatives','neutrals'],
-                values=[500,460,620],
+                hole=.8,
+
+                values=[count1,countneg,count0],
                 name="Sentiment Analysis",
                 hoverinfo='label+percent',
-                textinfo='value'
-                
-
-                )
-
-            ],
+                textinfo='label+percent',
+                insidetextorientation='radial',
+                textfont_color='white',
+                marker=dict(colors=colors))],
             'layout':go.Layout(
-                title ="Pie Chart",
-                
-                
-        
+                title ="Emotion Distribution",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
 
-                )
-            }
+                      ),
 
-
-            )
-
-
-        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
-
-        html.Div([
-        dcc.Graph(
-            id="pie_chart",
-            figure={
-            'data':[
-            go.Pie(
-                labels=['positives','negatives','neutrals'],
-                values=[500,460,620],
-                name="Sentiment Analysis",
-                hoverinfo='label+percent',
-                textinfo='value'
-                
-
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Pie Chart",
-                
-                
-        
-
-                )
-            }
+                paper_bgcolor ="#07031a"
+                )})]
+            ,style={'width':'50%','display':'inline-block','padding':'0 0 0 20'}),
 
 
-            )
+html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=fig1,
+         )]
+            ,style={'width':'50%','display':'inline-block','padding':'0 0 0 20'}),
+
+html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=fig,
+         )]
+            ,style={'display':'block','padding':'0 0 0 20'}),
+
+html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=fig2,
+         )]
+            ,style={'display':'block','padding':'0 0 0 20'}),
 
 
-        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
+html.Div([ 
+        html.Img(src=app.get_asset_url('lock1Word1.jpeg')),
+        html.Img(src=app.get_asset_url('lock1Word-1.jpeg')) 
 
-        html.Div([
-        dcc.Graph(
-            id="pie_chart",
-            figure={
-            'data':[
-            go.Pie(
-                labels=['positives','negatives','neutrals'],
-                values=[500,460,620],
-                name="Sentiment Analysis",
-                hoverinfo='label+percent',
-                textinfo='value'
-                
+         ]
 
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Pie Chart",
-                
-                
-        
-
-                )
-            }
+        ,style={'width':'100%','display':'block','padding':'0 0 0 20'}),
 
 
-            )
 
 
-        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
 
-        html.Div([
-        dcc.Graph(
-            id="pie_chart",
-            figure={
-            'data':[
-            go.Pie(
-                labels=['positives','negatives','neutrals'],
-                values=[500,460,620],
-                name="Sentiment Analysis",
-                hoverinfo='label+percent',
-                textinfo='value'
-                
-
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Pie Chart",
-                
-                
-        
-
-                )
-            }
-
-
-            )
-
-
-        ],style={'width':'33.33%','display':'inline-block','padding':'0 0 0 20'}),
-
-        ])
+        ],style={'background':'#25274d'})
 
         
     elif tab == 'tab-2':
@@ -412,4 +505,4 @@ def shutdown():
     if client:
         client.disconnect()'''
 if __name__ == '__main__':
-    app.run_server(port =8000,debug=True)
+    app.run_server(debug=True)
