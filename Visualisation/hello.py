@@ -18,17 +18,10 @@ import nltk
 import regex as re
 from plotly.subplots import make_subplots
 
-pio.templates.default="plotly_dark"
-external_stylesheets = ['https://codepen.io/anon/pen/mardKv.css']
-theme =  {
-    'dark': True,
-    'detail': '#007439',
-    'primary': '#00EA64',
-    'secondary': '#6E6E6E',
-}
 
 
-app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
+
+app = dash.Dash(__name__)
 
 
 df1 = pd.read_csv('lock1.csv',encoding='latin')
@@ -193,7 +186,7 @@ count_anger=tone['anger'].sum()
 colors_emo=['#ff9595','#ff9595','#ff9595','#80bdab','royalblue','royalblue','royalblue']
 
 fig1 = go.Figure([go.Bar(
-             x=['😁','😎','🧐','😐','🥺','😨','😡'],
+             x=['😁','😎','🧐','😐','🥺','😭','😡'],
              y=[count_joy,count_confident,count_analytical,count_tentative,count_sad,count_fear,count_anger],
              hovertext=['Happy','Hopeful','Analytical','Neutral','Sad','Fearful','Angry'],
              hoverinfo='text+y',
@@ -320,7 +313,7 @@ html.Div([
 
          ]
 
-        ,style={'width':'100%','display':'block','padding':'0 0 0 20'}),
+        ,style={'width':'100%','display':'block'}),
 
 
 
