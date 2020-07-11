@@ -247,7 +247,280 @@ fig2['layout'].update( title ="Line Chart",
                 #yaxis_tickformat='percent'
                 )
 #fig2.update_xaxes(tickfont=dict(size=5))
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------CHINA-------------------------------------------------------------
+d1=pd.read_csv('./China/Lock1.csv')
+d2=pd.read_csv('./China/Lock2.csv')
+d3=pd.read_csv('./China/Lock3.csv')
+d4=pd.read_csv('./China/Lock4.csv')
+china_lock1_pos=(d1['labels'][d1['labels']==1]).count()
+china_lock1_neg=(d1['labels'][d1['labels']==-1]).count()
+china_lock2_pos=(d2['labels'][d2['labels']==1]).count()
+china_lock2_neg=(d2['labels'][d2['labels']==-1]).count()
+china_lock3_pos=(d3['labels'][d3['labels']==1]).count()
+china_lock3_neg=(d3['labels'][d3['labels']==-1]).count()
+china_lock4_pos=(d4['labels'][d4['labels']==1]).count()
+china_lock4_neg=(d4['labels'][d4['labels']==-1]).count()
+
+lockdown=['Lockdown 1.0', 'Lockdown 2.0', 'Lockdown 3.0','Lockdown 4.0']
+
+figchina = go.Figure(data=[
+    go.Bar(name='Negative', x=lockdown,y=['0.8','0.09','0.33','0.98'],textposition='auto'),
+    go.Bar(name='Positive', x=lockdown,y=['0.77','0.77','0.3','0.44'],textposition='auto')
+])
+# Change the bar mode
+figchina.update_layout(barmode='group',
+                title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=False),
+                yaxis_tickformat=',.0%',
+                yaxis_range=[0,1]
+
+
+    )
+figchina.update_yaxes(showticklabels=True)
+#-------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------UNITY-------------------------------------------------------------
+d1=pd.read_csv('./China/Lock1.csv')
+d2=pd.read_csv('./China/Lock2.csv')
+d3=pd.read_csv('./China/Lock3.csv')
+d4=pd.read_csv('./China/Lock4.csv')
+china_lock1_pos=(d1['labels'][d1['labels']==1]).count()
+china_lock1_neg=(d1['labels'][d1['labels']==-1]).count()
+china_lock2_pos=(d2['labels'][d2['labels']==1]).count()
+china_lock2_neg=(d2['labels'][d2['labels']==-1]).count()
+china_lock3_pos=(d3['labels'][d3['labels']==1]).count()
+china_lock3_neg=(d3['labels'][d3['labels']==-1]).count()
+china_lock4_pos=(d4['labels'][d4['labels']==1]).count()
+china_lock4_neg=(d4['labels'][d4['labels']==-1]).count()
+
+lockdown=['Lockdown 1.0', 'Lockdown 2.0', 'Lockdown 3.0','Lockdown 4.0']
+
+figchina = go.Figure(data=[
+    go.Bar(name='Negative', x=lockdown,y=['0.8','0.09','0.33','0.98'],textposition='auto'),
+    go.Bar(name='Positive', x=lockdown,y=['0.77','0.77','0.3','0.44'],textposition='auto')
+])
+# Change the bar mode
+figchina.update_layout(barmode='group',
+                title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=False),
+                yaxis_tickformat=',.0%',
+                yaxis_range=[0,1]
+
+
+    )
+figchina.update_yaxes(showticklabels=True)
+#-------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------WFH-------------------------------------------------------------
+d1=pd.read_csv('./China/Lock1.csv')
+d2=pd.read_csv('./China/Lock2.csv')
+d3=pd.read_csv('./China/Lock3.csv')
+d4=pd.read_csv('./China/Lock4.csv')
+china_lock1_pos=(d1['labels'][d1['labels']==1]).count()
+china_lock1_neg=(d1['labels'][d1['labels']==-1]).count()
+china_lock2_pos=(d2['labels'][d2['labels']==1]).count()
+china_lock2_neg=(d2['labels'][d2['labels']==-1]).count()
+china_lock3_pos=(d3['labels'][d3['labels']==1]).count()
+china_lock3_neg=(d3['labels'][d3['labels']==-1]).count()
+china_lock4_pos=(d4['labels'][d4['labels']==1]).count()
+china_lock4_neg=(d4['labels'][d4['labels']==-1]).count()
+
+lockdown=['Lockdown 1.0', 'Lockdown 2.0', 'Lockdown 3.0','Lockdown 4.0']
+
+figchina = go.Figure(data=[
+    go.Bar(name='Negative', x=lockdown,y=['0.8','0.09','0.33','0.98'],textposition='auto'),
+    go.Bar(name='Positive', x=lockdown,y=['0.77','0.77','0.3','0.44'],textposition='auto')
+])
+# Change the bar mode
+figchina.update_layout(barmode='group',
+                title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=False),
+                yaxis_tickformat=',.0%',
+                yaxis_range=[0,1]
+
+
+    )
+figchina.update_yaxes(showticklabels=True)
+#-------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------GOVT-------------------------------------------------------------
+d1=pd.read_csv('./China/Lock1.csv')
+d2=pd.read_csv('./China/Lock2.csv')
+d3=pd.read_csv('./China/Lock3.csv')
+d4=pd.read_csv('./China/Lock4.csv')
+china_lock1_pos=(d1['labels'][d1['labels']==1]).count()
+china_lock1_neg=(d1['labels'][d1['labels']==-1]).count()
+china_lock2_pos=(d2['labels'][d2['labels']==1]).count()
+china_lock2_neg=(d2['labels'][d2['labels']==-1]).count()
+china_lock3_pos=(d3['labels'][d3['labels']==1]).count()
+china_lock3_neg=(d3['labels'][d3['labels']==-1]).count()
+china_lock4_pos=(d4['labels'][d4['labels']==1]).count()
+china_lock4_neg=(d4['labels'][d4['labels']==-1]).count()
+
+lockdown=['Lockdown 1.0', 'Lockdown 2.0', 'Lockdown 3.0','Lockdown 4.0']
+
+figchina = go.Figure(data=[
+    go.Bar(name='Negative', x=lockdown,y=['0.8','0.09','0.33','0.98'],textposition='auto'),
+    go.Bar(name='Positive', x=lockdown,y=['0.77','0.77','0.3','0.44'],textposition='auto')
+])
+# Change the bar mode
+figchina.update_layout(barmode='group',
+                title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=False),
+                yaxis_tickformat=',.0%',
+                yaxis_range=[0,1]
+
+
+    )
+figchina.update_yaxes(showticklabels=True)
+#-------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------EXTEND-------------------------------------------------------------
+d1=pd.read_csv('./China/Lock1.csv')
+d2=pd.read_csv('./China/Lock2.csv')
+d3=pd.read_csv('./China/Lock3.csv')
+d4=pd.read_csv('./China/Lock4.csv')
+china_lock1_pos=(d1['labels'][d1['labels']==1]).count()
+china_lock1_neg=(d1['labels'][d1['labels']==-1]).count()
+china_lock2_pos=(d2['labels'][d2['labels']==1]).count()
+china_lock2_neg=(d2['labels'][d2['labels']==-1]).count()
+china_lock3_pos=(d3['labels'][d3['labels']==1]).count()
+china_lock3_neg=(d3['labels'][d3['labels']==-1]).count()
+china_lock4_pos=(d4['labels'][d4['labels']==1]).count()
+china_lock4_neg=(d4['labels'][d4['labels']==-1]).count()
+
+lockdown=['Lockdown 1.0', 'Lockdown 2.0', 'Lockdown 3.0','Lockdown 4.0']
+
+figchina = go.Figure(data=[
+    go.Bar(name='Negative', x=lockdown,y=['0.8','0.09','0.33','0.98'],textposition='auto'),
+    go.Bar(name='Positive', x=lockdown,y=['0.77','0.77','0.3','0.44'],textposition='auto')
+])
+# Change the bar mode
+figchina.update_layout(barmode='group',
+                title ="Line Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                #uniformtext_minsize=8, 
+                #uniformtext_mode='hide',
+                title_text="Emotional Trends in Lockdown 1.0",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=False),
+                yaxis_tickformat=',.0%',
+                yaxis_range=[0,1]
+
+
+    )
+figchina.update_yaxes(showticklabels=True)
+#-------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------OVERALL Sentiment-----------------------------------------------
+figoverall = make_subplots(rows=1, cols=3)
+
+figoverall.add_trace(
+    go.Bar(y=[100,50,70,89],
+                x=lockdown,
+                name='# Negative',
+                textfont_color='white',
+                
+                #orientation='h'
+                ),
+    row=1, col=1
+)
+
+figoverall.add_trace(
+    go.Bar(y=[100,50,70,89],
+                x=lockdown,
+                name='# Positive',
+                textfont_color='white',
+                
+                #orientation='h'
+                ),
+    row=1, col=2
+)
+
+figoverall.add_trace(
+    go.Bar(y=[100,50,70,89],
+                x=lockdown,
+                name='# Neutral',
+                textfont_color='white',
+
+                #orientation='h'
+                ),
+    row=1, col=3
+)
+
+
+
+figoverall.update_layout( title ="Bar Chart",
+                font=dict(
+                    family="Courier New,monospace",
+                    size=14,
+                    color='white'
+
+                      ),
+
+                paper_bgcolor ="#07031a",
+                plot_bgcolor="#07031a",
+                uniformtext_minsize=8, 
+                uniformtext_mode='hide',
+                title_text="Popular Hashtags"
+
+                )
+#----------------------------------------------------------------------------------------------
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 def render_content(tab):
@@ -320,139 +593,38 @@ html.Div([
 
 
         ],style={'background':'#25274d'})
+#-------------------------------------------------
 
         
-    elif tab == 'tab-2':
-       return html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
-
-                )
-            }
-
-
-            )
-
-
-        ])
+   
+        
     elif tab == 'tab-3':
        return html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                )
+        html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=figchina,
+         )]
+            ,style={'width':'50%','display':'inline-block','padding':'0 0 0 20'}),
 
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
+        html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=figchina,
+         )]
+            ,style={'width':'50%','display':'inline-block','padding':'0 0 0 20'}),
 
-                )
-            }
-
-
-            )
-
-
-        ])
-    elif tab == 'tab-4':
-       return html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
-
-                )
-            }
-
-
-            )
-
-
-        ])
-    elif tab == 'tab-5':
-       return html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
-
-                )
-            }
-
-
-            )
-
-
-        ])
-    elif tab == 'tab-6':
-       return html.Div([
-        dcc.Graph(
-            id="scatter_chart",
-            figure={
-            'data':[
-            go.Scatter(
-                x=df.text,
-                y=df.labels,
-                mode='markers'
-                )
-
-            ],
-            'layout':go.Layout(
-                title ="Scatterplot",
-                xaxis = {'title': 'Tweet'},
-                yaxis = {'title': 'label'}
-
-                )
-            }
-
-
-            )
-
-
-        ])
-
+       
+       html.Div([
+            dcc.Graph(
+            id="bar_chart",
+            figure=figoverall,
+         )]
+            ,style={'display':'block','padding':'0 0 0 20'}),
+    
+        
+     ]),
+    
 
 # /* Endpoint to greet and add a new visitor to database.
 # * Send a POST request to localhost:8000/api/visitors with body
