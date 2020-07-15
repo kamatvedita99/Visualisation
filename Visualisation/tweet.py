@@ -1,10 +1,13 @@
 import time
-from tweepy import Stream
+from datetime import datetime
+from datetime import timedelta
+# from datetime import time as times
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
+from tweepy import Stream
+from tweepy import OAuthHandler
 import json
 from textblob import TextBlob
-import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 from nltk.stem import WordNetLemmatizer #word stemmer class
@@ -19,6 +22,7 @@ from nltk.corpus import stopwords
 import nltk
 # import re
 import string
+
 
 
 "# -- coding: utf-8 --"
@@ -36,6 +40,8 @@ filename = 'logR.sav'
 
 # filename='logR.sav'
 loaded_model = joblib.load(open(filename, 'rb'))
+
+
 def calctime(a):
     return time.time() - a
 
@@ -50,8 +56,6 @@ initime = time.time()
 
 ps = PorterStemmer()
 wnl = WordNetLemmatizer()
-plt.ion()
-import test
 
 ckey = 'WnyAgUaacX1YheRSJqwMhhZgR'
 csecret = 'LzHg7GuAfJNIsHRpRXEk72TaEjcG5RL9yl85c0rbI1V1pg6rHQ'
@@ -60,6 +64,7 @@ asecret = "n3Yc9GzA2Saa6LNPZ5465WdQNj06G6hBrqcWnpwkc4jCb"
 
 js=pd.DataFrame(columns=['text','labels'])
 tl=[]
+
 class listener(StreamListener):
 
     def on_data(self, data):
@@ -67,7 +72,13 @@ class listener(StreamListener):
         global tl
         all_data = json.loads(data)
         tweet = all_data["text"]
-
+        dt=all_data['created_at']
+        dt=dt.split(" ")
+        local_datetime = datetime.now()
+        dt=dt[3]
+        dt= datetime.strptime(dt, '%H:%M:%S').time()
+        tmp_datetime =datetime.combine(datetime.today(), dt)
+        dt=(tmp_datetime+timedelta(hours=5,minutes=30)).time()
         # username=all_data["user"]["screen_name"]
         # tweet = " ".join(re.findall("[a-zA-Z]+", tweet))
         #
@@ -155,8 +166,9 @@ class listener(StreamListener):
         print("pos ",positive)
         print("neg",negative)
         print("neu",neutral)
-        k={"pos":positive,"neg":negative,"time":t,"details":tl}
+        k={"pos":positive,"neg":negative,'neu':neutral,"details":tl,"time":dt}
         s=pd.DataFrame(k)
+        print(s)
         try:
             s.to_json('count.json')
             tl=[]
@@ -209,5 +221,3 @@ auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, listener(count),lang='en',geocode="22.3511148,78.6677428,1km")
 twitterStream.filter(track=["#IndiaFightsCorona","covid19 india","corona india","#covid19#india","corona warriors","#cluelessbjp"])
-
-
