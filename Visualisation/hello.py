@@ -31,7 +31,7 @@ import pickle
 import string
 import joblib
 from nltk.corpus import stopwords
-
+#from tweet import tl as tl
 lemma = WordNetLemmatizer()
 
 app = dash.Dash(__name__)
@@ -39,6 +39,7 @@ neu=0
 pos = 0
 neg = 0
 time = 0
+#print(tl['tweet'])
 vectorizer = pickle.load(open("vector.pickel", "rb"))
 w = pickle.load(open('train', 'rb'))
 x_train=w['x_train']
@@ -246,10 +247,46 @@ h4 = pd.DataFrame({'Hashtag': list(g4.keys()),
                   'Count': list(g4.values())})
 # selecting top 10 most frequent hashtags     
 h4 = h4.nlargest(columns="Count", n = 5) 
-
+#-------------------------------------------LIVE DATA--------------------------------------------
+'''HT_regular = hashtag_extract(tl['text'][tl['labels'] == 0])
+# extracting hashtags from racist/sexist tweets
+HT_negative = hashtag_extract(all_data['text'][all_data['labels'] == -1])
+HT_positive = hashtag_extract(all_data['text'][all_data['labels'] == 1])
+# unnesting list
+HT_regular = sum(HT_regular,[])
+HT_negative = sum(HT_negative,[])
+HT_positive = sum(HT_positive,[])
+#print(HT_regular,file=sys.stderr)
+#print(HT_negative,file=sys.stderr)
+#positive hashtags
+a5 = nltk.FreqDist(HT_regular)
+d5 = pd.DataFrame({'Hashtag': list(a5.keys()),
+                  'Count': list(a5.values())})
+# selecting top 10 most frequent hashtags     
+d5 = d5.nlargest(columns="Count", n = 5) 
+d5.head()
+#plt.figure(figsize=(22,10))
+#ax = sns.barplot(data=d, x= "Hashtag", y = "Count")
+#ax.set(ylabel = 'Count')
+#plt.show()
+#negative hastags funtion will come over here
+b5 = nltk.FreqDist(HT_negative)
+e5 = pd.DataFrame({'Hashtag': list(b5.keys()), 'Count': list(b5.values())})
+# selecting top 10 most frequent hashtags
+e5 = e5.nlargest(columns="Count", n = 5)   
+#plt.figure(figsize=(16,5))
+#ax = sns.barplot(data=e, x= "Hashtag", y = "Count")
+#ax.set(ylabel = 'Count')
+#plt.show()'''
+#g5 = nltk.FreqDist(HT_positive)
+#h5 = pd.DataFrame({'Hashtag': list(g5.keys()),
+                 # 'Count': list(g5.values())})
+# selecting top 10 most frequent hashtags     
+#h5 = h5.nlargest(columns="Count", n = 5) 
+'''
 #Use this for wordcount
 '''
-def word_count(sentence):
+'''def word_count(sentence):
     return len(sentence.split())
 df['word count'] = df['text'].apply(word_count)
 x = df['word count'][df.labels == 1]
@@ -464,7 +501,7 @@ figloc3.update_layout(
                 )
 
 #-------------Lockdown4-----------------------
-figloc4 = make_subplots(rows=1, cols=3)
+figloc4 = make_subplots(rows=1, cols=2)
 
 figloc4.add_trace(
     go.Bar(y=e4.Hashtag,
@@ -476,7 +513,7 @@ figloc4.add_trace(
     row=1, col=1
 )
 
-figloc4.add_trace(
+'''figloc4.add_trace(
     go.Bar(y=h4.Hashtag,
                 x=h4.Count,
                 name='# Positive',
@@ -484,9 +521,9 @@ figloc4.add_trace(
                 
                 orientation='h'),
     row=1, col=2
-)
+)'''
 
-figloc4.add_trace(
+'''figloc4.add_trace(
     go.Bar(y=d4.Hashtag,
                 x=d4.Count,
                 name='# Neutral',
@@ -494,7 +531,7 @@ figloc4.add_trace(
 
                 orientation='h'),
     row=1, col=3
-)
+)'''
 
 
 
@@ -513,6 +550,8 @@ figloc4.update_layout(
                 title_text="Popular Hashtags"
 
                 )
+#------------------------------------LIVE TWEETS-------------
+#figlivetweet = make_subplots(rows=1, cols=3)
 
 
 #----------------------------------------WATSON TONE ANALYSER------------------------------------------------------------
@@ -1292,8 +1331,8 @@ def render_content(tab,sel_option,n):
     temp={'pos':positive,'neg':negative,'neu':neutral,'time':df['time'][0],'text':[tp]}
     temp=pd.DataFrame(temp,columns=['pos','neg','neu','time','text'],index=[[1]])
     tf2=pd.concat([tf2,temp],ignore_index=True)
-    
-    
+    #print(tf2)
+    #tf2.to_csv('LIVE.csv')
     figlive=px.bar(cal,x='val',y='count')
     figlive.update_layout( title ="Bar Chart",
                 font=dict(
@@ -1307,7 +1346,7 @@ def render_content(tab,sel_option,n):
                 plot_bgcolor="#07031a",
                 uniformtext_minsize=8, 
                 uniformtext_mode='hide',
-                title_text="Overall Analysis of the Sentiments"
+                title_text="Time series of the Sentiments"
 
                 )
     figlive2=px.scatter(tf2,x='time',y=['neg','pos','neu'])
@@ -1323,7 +1362,7 @@ def render_content(tab,sel_option,n):
                 plot_bgcolor="#07031a",
                 uniformtext_minsize=8, 
                 uniformtext_mode='hide',
-                title_text=" Analysis of the Sentiments"
+                title_text=" Distribution the Sentiments"
 
                 )
     
@@ -1333,15 +1372,19 @@ def render_content(tab,sel_option,n):
 
             html.Div([
            dcc.Graph(id='trend2',
+            figure=figlive2),
+], style={'display':'block','padding':'0 0 0 20'}),
+            
+            html.Div([
+           dcc.Graph(id='trend2',
             figure=figlive),
             
     ], style={'display':'block','padding':'0 0 0 20'}),
-            html.Div([
-           dcc.Graph(id='trend2',
-            figure=figlive2),
-], style={'display':'block','padding':'0 0 0 20'})
+           
 
-            ],style ={'background':'#25274d'})    
+            ],style ={'background':'#25274d'}
+
+            )    
     
     elif tab == 'tab-6':
        return html.Div([
@@ -1497,10 +1540,12 @@ html.Div([
 
 
 html.Div([
+                
+    html.Div([html.H1('Wordcloud')],style={'color':'white','textAlign':'center','fontFamily':'Courier New,monospace'}),
     html.Div([
-        html.Img(src=app.get_asset_url('lock1neg.jpeg')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
+        html.Img(src=app.get_asset_url('lock1neg.png')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
     html.Div([
-        html.Img(src=app.get_asset_url('lock1pos.jpeg')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
+        html.Img(src=app.get_asset_url('lock1pos.png')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
 
          ]
 
@@ -1570,12 +1615,15 @@ html.Div([
 
 
 html.Div([ 
-        html.Img(src=app.get_asset_url('lock4neg.png')),
-        html.Img(src=app.get_asset_url('lock4pos.png')) 
+     html.Div([html.H1('Wordcloud')],style={'color':'white','textAlign':'center','fontFamily':'Courier New,monospace'}),
+      html.Div([
+        html.Img(src=app.get_asset_url('lock2neg.png')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
+    html.Div([
+        html.Img(src=app.get_asset_url('lock2pos.png')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
 
-         ]
+         ]   
 
-        ,style={'width':'100%','display':'block','padding':'0 0 0 50'}),
+         ,style={'margin':'0 20 20 0','background':'#07031a'}),
 
 
 
@@ -1641,7 +1689,8 @@ html.Div([
 
 
 html.Div([
-    html.Div([
+     html.Div([html.H1('Wordcloud')],style={'color':'white','textAlign':'center','fontFamily':'Courier New,monospace'}),
+   html.Div([
         html.Img(src=app.get_asset_url('lock3neg.png')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
     html.Div([
         html.Img(src=app.get_asset_url('lock3pos.png')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
@@ -1714,10 +1763,11 @@ html.Div([
 
 
 html.Div([ 
-        html.Div([
+        html.Div([html.H1('Wordcloud')],style={'color':'white','textAlign':'center','fontFamily':'Courier New,monospace'}),
+    html.Div([
         html.Img(src=app.get_asset_url('lock4neg.png'))],style={'width':'50%','display':'inline-block','padding':'0 0 0 0'}),
         html.Div([
-        html.Img(src=app.get_asset_url('lock4pos.png')) ],style={'width':'50%','display':'inline-block','border':'1px solid red','overflow':'hidden'})
+        html.Img(src=app.get_asset_url('lock4pos.png')) ],style={'width':'50%','display':'inline-block','padding':'0 0 0 0'})
 
          ]
 

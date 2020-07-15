@@ -67,27 +67,23 @@ asecret = "n3Yc9GzA2Saa6LNPZ5465WdQNj06G6hBrqcWnpwkc4jCb"
 
 js=pd.DataFrame(columns=['text','labels'])
 tl=[]
-hashtags=[]
-location=[]
 
 class listener(StreamListener):
 
     def on_data(self, data):
         global initime
         global tl
-        global hashtags
-        global location
         all_data = json.loads(data)
         print(all_data)
         tweet = all_data["text"]
-        location.append(all_data['user']['location'])
-
+        location=all_data['user']['location']
+        hashtags=[]
         try:
             for i in all_data['entities']['hashtags']:
                 hashtags.append(i['text'])
             print("hastags ",hashtags)
         except:
-            pass
+            hashtags=[]
         dt=all_data['created_at']
 
         dt=dt.split(" ")
@@ -155,7 +151,7 @@ class listener(StreamListener):
         print(t)
         # print(loaded_model)
         # print(vectorizer)
-        tl.append({'tweet':tweet,'label':m[0]})
+        tl.append({'tweet':tweet,'label':m[0],'location':location,'hashtags':hashtags})
         global positive
         global negative
         global neutral
@@ -183,8 +179,7 @@ class listener(StreamListener):
         print("pos ",positive)
         print("neg",negative)
         print("neu",neutral)
-        k={"pos":positive,"neg":negative,'neu':neutral,"details":tl,"time":dt,"hashtags":[hashtags],"location":[location]}
-        print(k)
+        k={"pos":positive,"neg":negative,'neu':neutral,"details":tl,"time":dt}
         s=pd.DataFrame(k)
         print(s)
         try:
