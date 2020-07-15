@@ -281,7 +281,7 @@ app.layout =  html.Div([
         options=[{'label': i, 'value': i} for i in dates['day'].unique()],
         value='25-03-2020',
         multi = False,
-        style = {'width': '40%'}
+        style = {'width':'40%'}
 
     )]),
     ],
@@ -1497,12 +1497,14 @@ html.Div([
 
 
 html.Div([
-        html.Img(src=app.get_asset_url('lock1neg.png')),
-        html.Img(src=app.get_asset_url('lock1pos.png')) 
+    html.Div([
+        html.Img(src=app.get_asset_url('lock1neg.jpeg')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
+    html.Div([
+        html.Img(src=app.get_asset_url('lock1pos.jpeg')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
 
          ]
 
-        ,style={'width':'100%','display':'block','padding':'0 0 0 20'}),
+        ,style={'margin':'0 20 20 0','background':'#07031a'}),
 
 
 
@@ -1568,8 +1570,8 @@ html.Div([
 
 
 html.Div([ 
-        html.Img(src=app.get_asset_url('lock2neg.png')),
-        html.Img(src=app.get_asset_url('lock2pos.png')) 
+        html.Img(src=app.get_asset_url('lock4neg.png')),
+        html.Img(src=app.get_asset_url('lock4pos.png')) 
 
          ]
 
@@ -1638,13 +1640,15 @@ html.Div([
             ,style={'display':'block','padding':'0 0 0 20'}),
 
 
-html.Div([ 
-        html.Img(src=app.get_asset_url('lock3neg.png')),
-        html.Img(src=app.get_asset_url('lock3pos.png')) 
+html.Div([
+    html.Div([
+        html.Img(src=app.get_asset_url('lock3neg.png')),],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid blue'}),
+    html.Div([
+        html.Img(src=app.get_asset_url('lock3pos.png')) ],style={'width':'50%','display':'inline-block','margin':'0 20 20 0','border':'1 px solid red'}),
 
          ]
 
-        ,style={'width':'100%','display':'block','padding':'0 0 0 50'}),
+        ,style={'margin':'0 20 20 0','background':'#07031a'}),
 
 
 
@@ -1713,11 +1717,11 @@ html.Div([
         html.Div([
         html.Img(src=app.get_asset_url('lock4neg.png'))],style={'width':'50%','display':'inline-block','padding':'0 0 0 0'}),
         html.Div([
-        html.Img(src=app.get_asset_url('lock4pos.png')) ],style={'width':'50%','display':'inline-block','padding':'0 0 0 0'})
+        html.Img(src=app.get_asset_url('lock4pos.png')) ],style={'width':'50%','display':'inline-block','border':'1px solid red','overflow':'hidden'})
 
          ]
 
-        ,#style={'width':'100%','display':'block','padding':'0 0 0 50'}
+        ,style={'background':'#07031a'}
         ),
 
 
